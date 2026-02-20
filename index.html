@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probabilidad y Estadística - Aplicación Interactiva</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --light: #0094b9;
+            --dark: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #17073f;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.984);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: var(--accent);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+            margin: 5px 0;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button.secondary {
+            background-color: var(--secondary);
+        }
+
+        .error {
+            color: var(--danger);
+            font-weight: bold;
+            margin-top: 5px;
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--light);
+        }
+
+        canvas {
+            background: #fff;
+            border: 1px solid #ccc;
+            width: 100%;
+            height: auto;
+            margin-top: 15px;
+        }
+
+        .result-box {
+            background: #f9f9f9;
+            padding: 15px;
+            border-left: 5px solid var(--accent);
+            margin-top: 10px;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Probabilidad y Estadística</h1>
+
+    <!-- 1. INGRESO DE DATOS -->
+    <section id="datos">
+        <h2>1. Ingreso de Datos</h2>
+        <div class="form-group">
+            <label for="dataInput">Ingrese datos numéricos (separados por comas):</label>
+            <textarea id="dataInput" rows="3" placeholder="Ejemplo: 10, 15, 20, 25, 30..."></textarea>
+            <p id="dataCount">Datos ingresados: 0</p>
+            <div id="dataError" class="error">Por favor, ingrese al menos 20 valores numéricos válidos.</div>
+        </div>
+        <button onclick="procesarDatosManual()">Procesar Datos</button>
+        <button class="secondary" onclick="generarDatosAleatorios()">Generar 20 Datos Aleatorios</button>
+    </section>
+
+    <!-- 2. ESTADÍSTICA DESCRIPTIVA -->
+    <section id="estadistica">
+        <h2>2. Estadística Descriptiva</h2>
+        <div id="est-results" class="result-box">
+            Esperando datos...
+        </div>
+    </section>
+
+    <!-- 3. TABLA DE FRECUENCIAS -->
+    <section id="frecuencias">
+        <h2>3. Tabla de Frecuencias</h2>
+        <div id="tabla-container">
+            Esperando datos...
+        </div>
+    </section>
+
+    <!-- 4. GRÁFICAS -->
+    <section id="graficas">
+        <h2>4. Gráficas</h2>
+        <div class="grid">
+            <div class="chart-container">
+                <h3>Histograma</h3>
+                <canvas id="canvasHistograma" width="400" height="300"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Polígono de Frecuencias</h3>
+                <canvas id="canvasPoligono" width="400" height="300"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Ojiva</h3>
+                <canvas id="canvasOjiva" width="400" height="300"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Diagrama de Pareto</h3>
+                <canvas id="canvasPareto" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. PROBABILIDAD -->
+    <section id="probabilidad">
+        <h2>5. Probabilidad Simple</h2>
+        <div class="form-group">
+            <label for="probValue">Calcular P(x) para el valor:</label>
+            <input type="number" id="probValue" placeholder="Ingrese un valor de los datos">
+        </div>
+        <button onclick="calcularProbabilidad()">Calcular P(x)</button>
+        <div id="probResult" class="result-box"></div>
+    </section>
+
+    <!-- 6. CONJUNTOS -->
+    <section id="conjuntos">
+        <h2>6. Operaciones con Conjuntos</h2>
+        <div class="grid">
+            <div class="form-group">
+                <label for="setA">Conjunto A (separado por comas):</label>
+                <input type="text" id="setA" placeholder="1, 2, 3, 4">
+            </div>
+            <div class="form-group">
+                <label for="setB">Conjunto B (separado por comas):</label>
+                <input type="text" id="setB" placeholder="3, 4, 5, 6">
+            </div>
+        </div>
+        <button onclick="calcularConjuntos()">Calcular Operaciones</button>
+        <div id="conjuntosResult" class="result-box"></div>
+    </section>
+
+    <!-- 7. REGLA MULTIPLICATIVA Y DIAGRAMA DE ÁRBOL -->
+    <section id="regla-arbol">
+        <h2>7. Regla Multiplicativa y Diagrama de Árbol</h2>
+        <div class="grid">
+            <div class="form-group">
+                <label for="probA">P(A):</label>
+                <input type="number" id="probA" step="0.01" min="0" max="1" placeholder="0.5">
+            </div>
+            <div class="form-group">
+                <label for="probB_A">P(B|A):</label>
+                <input type="number" id="probB_A" step="0.01" min="0" max="1" placeholder="0.3">
+            </div>
+        </div>
+        <button onclick="calcularReglaMultiplicativa()">Calcular P(A ∩ B) y Dibujar Árbol</button>
+        <div id="arbolResult" class="result-box"></div>
+        <canvas id="canvasArbol" width="600" height="300" style="background:#fff;"></canvas>
+    </section>
+
+    <!-- 8. PERMUTACIONES Y COMBINACIONES -->
+    <section id="conteo">
+        <h2>8. Permutaciones y Combinaciones</h2>
+        <div class="grid">
+            <div class="form-group">
+                <label for="valN">n (total de elementos):</label>
+                <input type="number" id="valN" min="0" placeholder="10">
+            </div>
+            <div class="form-group">
+                <label for="valR">r (elementos tomados):</label>
+                <input type="number" id="valR" min="0" placeholder="3">
+            </div>
+        </div>
+        <button onclick="calcularConteo()">Calcular nPr y nCr</button>
+        <div id="conteoResult" class="result-box"></div>
+    </section>
+</div>
+
+<script>
+    // Variables globales
+    let datosGlobales = [];
+    let tablaFrecuencias = [];
+
+    // --- 1. INGRESO DE DATOS ---
+
+    function validarDatos(inputStr) {
+        const arr = inputStr.split(',')
+            .map(s => s.trim())
+            .filter(s => s !== '')
+            .map(Number);
+        
+        const validos = arr.filter(n => !isNaN(n));
+        return validos;
+    }
+
+    function procesarDatosManual() {
+        const raw = document.getElementById('dataInput').value;
+        const validos = validarDatos(raw);
+        
+        if (validos.length < 20) {
+            document.getElementById('dataError').style.display = 'block';
+            return;
+        }
+        
+        document.getElementById('dataError').style.display = 'none';
+        datosGlobales = validos;
+        document.getElementById('dataCount').innerText = `Datos ingresados: ${datosGlobales.length}`;
+        ejecutarAnalisis();
+    }
+
+    function generarDatosAleatorios() {
+        let aleatorios = [];
+        for (let i = 0; i < 20; i++) {
+            aleatorios.push(Math.floor(Math.random() * 100));
+        }
+        document.getElementById('dataInput').value = aleatorios.join(', ');
+        procesarDatosManual();
+    }
+
+    function ejecutarAnalisis() {
+        if (datosGlobales.length === 0) return;
+        
+        calcularEstadisticas();
+        generarTablaFrecuencias();
+        dibujarGraficas();
+    }
+
+    // --- 2. ESTADÍSTICA DESCRIPTIVA ---
+
+    function calcularEstadisticas() {
+        const n = datosGlobales.length;
+        const sorted = [...datosGlobales].sort((a, b) => a - b);
+        
+        const min = sorted[0];
+        const max = sorted[n - 1];
+        const rango = max - min;
+        
+        const suma = sorted.reduce((a, b) => a + b, 0);
+        const media = suma / n;
+        
+        let mediana;
+        if (n % 2 === 0) {
+            mediana = (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
+        } else {
+            mediana = sorted[Math.floor(n / 2)];
+        }
+        
+        // Moda
+        const counts = {};
+        let maxFreq = 0;
+        let modas = [];
+        sorted.forEach(val => {
+            counts[val] = (counts[val] || 0) + 1;
+            if (counts[val] > maxFreq) maxFreq = counts[val];
+        });
+        for (const val in counts) {
+            if (counts[val] === maxFreq) modas.push(val);
+        }
+        const modaStr = modas.length === Object.keys(counts).length ? 'No hay moda (todos únicos)' : modas.join(', ');
+
+        const resDiv = document.getElementById('est-results');
+        resDiv.innerHTML = `
+            <p><strong>Media:</strong> ${media.toFixed(2)}</p>
+            <p><strong>Mediana:</strong> ${mediana}</p>
+            <p><strong>Moda:</strong> ${modaStr} (Frecuencia: ${maxFreq})</p>
+            <p><strong>Mínimo:</strong> ${min}</p>
+            <p><strong>Máximo:</strong> ${max}</p>
+            <p><strong>Rango:</strong> ${rango}</p>
+            <p><strong>Total Datos (N):</strong> ${n}</p>
+        `;
+    }
+
+    // --- 3. TABLA DE FRECUENCIAS ---
+
+    function generarTablaFrecuencias() {
+        const counts = {};
+        datosGlobales.forEach(x => counts[x] = (counts[x] || 0) + 1);
+        
+        const sortedKeys = Object.keys(counts).sort((a, b) => Number(a) - Number(b));
+        const N = datosGlobales.length;
+        
+        tablaFrecuencias = [];
+        let fiAcumulada = 0;
+        
+        let html = `<table>
+            <tr>
+                <th>xi (Valor)</th>
+                <th>fi (Absoluta)</th>
+                <th>Fi (Acumulada)</th>
+                <th>fr (Relativa)</th>
+                <th>Fr (Rel. Acum.)</th>
+            </tr>`;
+            
+        sortedKeys.forEach(key => {
+            const val = Number(key);
+            const fi = counts[key];
+            fiAcumulada += fi;
+            const fr = fi / N;
+            const Fr = fiAcumulada / N;
+            
+            tablaFrecuencias.push({ xi: val, fi, Fi: fiAcumulada, fr, Fr });
+            
+            html += `<tr>
+                <td>${val}</td>
+                <td>${fi}</td>
+                <td>${fiAcumulada}</td>
+                <td>${fr.toFixed(4)}</td>
+                <td>${Fr.toFixed(4)}</td>
+            </tr>`;
+        });
+        
+        html += `</table>`;
+        document.getElementById('tabla-container').innerHTML = html;
+    }
+
+    // --- 4. GRÁFICAS ---
+
+    function clearCanvas(id) {
+        const canvas = document.getElementById(id);
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        return ctx;
+    }
+
+    function dibujarEjes(ctx, w, h, padding) {
+        ctx.beginPath();
+        ctx.moveTo(padding, padding);
+        ctx.lineTo(padding, h - padding);
+        ctx.lineTo(w - padding, h - padding);
+        ctx.stroke();
+    }
+
+    function dibujarGraficas() {
+        if (tablaFrecuencias.length === 0) return;
+        
+        const data = tablaFrecuencias;
+        const maxFi = Math.max(...data.map(d => d.fi));
+        const maxFiAcum = data[data.length - 1].Fi;
+        
+        dibujarHistograma(data, maxFi);
+        dibujarPoligono(data, maxFi);
+        dibujarOjiva(data, maxFiAcum);
+        dibujarPareto(data);
+    }
+
+    function dibujarHistograma(data, maxFi) {
+        const ctx = clearCanvas('canvasHistograma');
+        const w = 400, h = 300, p = 40;
+        dibujarEjes(ctx, w, h, p);
+        
+        const barW = (w - 2 * p) / data.length;
+        data.forEach((d, i) => {
+            const barH = (d.fi / maxFi) * (h - 2 * p);
+            ctx.fillStyle = '#3498db';
+            ctx.fillRect(p + i * barW, h - p - barH, barW - 2, barH);
+            ctx.fillStyle = '#000';
+            ctx.font = '10px Arial';
+            ctx.fillText(d.xi, p + i * barW + barW/4, h - p + 15);
+        });
+    }
+
+    function dibujarPoligono(data, maxFi) {
+        const ctx = clearCanvas('canvasPoligono');
+        const w = 400, h = 300, p = 40;
+        dibujarEjes(ctx, w, h, p);
+        
+        const stepX = (w - 2 * p) / (data.length - 1 || 1);
+        ctx.beginPath();
+        ctx.strokeStyle = '#e74c3c';
+        data.forEach((d, i) => {
+            const x = p + i * stepX;
+            const y = h - p - (d.fi / maxFi) * (h - 2 * p);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+            
+            ctx.arc(x, y, 3, 0, Math.PI * 2);
+        });
+        ctx.stroke();
+    }
+
+    function dibujarOjiva(data, maxFiAcum) {
+        const ctx = clearCanvas('canvasOjiva');
+        const w = 400, h = 300, p = 40;
+        dibujarEjes(ctx, w, h, p);
+        
+        const stepX = (w - 2 * p) / (data.length - 1 || 1);
+        ctx.beginPath();
+        ctx.strokeStyle = '#27ae60';
+        data.forEach((d, i) => {
+            const x = p + i * stepX;
+            const y = h - p - (d.Fi / maxFiAcum) * (h - 2 * p);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+            
+            ctx.arc(x, y, 3, 0, Math.PI * 2);
+        });
+        ctx.stroke();
+    }
+
+    function dibujarPareto(data) {
+        const ctx = clearCanvas('canvasPareto');
+        const w = 400, h = 300, p = 40;
+        dibujarEjes(ctx, w, h, p);
+        
+        // Ordenar descendente para Pareto
+        const paretoData = [...data].sort((a, b) => b.fi - a.fi);
+        const total = paretoData[paretoData.length - 1].Fi; // Esto no es correcto si ordeno, necesito el N total
+        const N = datosGlobales.length;
+        const maxFi = paretoData[0].fi;
+        
+        const barW = (w - 2 * p) / paretoData.length;
+        let acum = 0;
+        
+        // Barras
+        paretoData.forEach((d, i) => {
+            const barH = (d.fi / maxFi) * (h - 2 * p);
+            ctx.fillStyle = '#f1c40f';
+            ctx.fillRect(p + i * barW, h - p - barH, barW - 2, barH);
+        });
+        
+        // Línea acumulada
+        ctx.beginPath();
+        ctx.strokeStyle = '#2c3e50';
+        paretoData.forEach((d, i) => {
+            acum += d.fi;
+            const x = p + i * barW + barW/2;
+            const y = h - p - (acum / N) * (h - 2 * p);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+            ctx.arc(x, y, 2, 0, Math.PI * 2);
+        });
+        ctx.stroke();
+    }
+
+    // --- 5. PROBABILIDAD ---
+
+    function calcularProbabilidad() {
+        const val = Number(document.getElementById('probValue').value);
+        const resDiv = document.getElementById('probResult');
+        
+        if (tablaFrecuencias.length === 0) {
+            resDiv.innerHTML = "Primero ingrese datos.";
+            return;
+        }
+        
+        const row = tablaFrecuencias.find(d => d.xi === val);
+        if (row) {
+            const N = datosGlobales.length;
+            resDiv.innerHTML = `P(${val}) = fi / N = ${row.fi} / ${N} = <strong>${row.fr.toFixed(4)}</strong>`;
+        } else {
+            resDiv.innerHTML = `El valor ${val} no se encuentra en los datos ingresados. P(${val}) = 0`;
+        }
+    }
+
+    // --- 6. CONJUNTOS ---
+
+    function calcularConjuntos() {
+        const parseSet = (id) => {
+            return [...new Set(document.getElementById(id).value.split(',')
+                .map(s => s.trim())
+                .filter(s => s !== ''))];
+        };
+        
+        const A = parseSet('setA');
+        const B = parseSet('setB');
+        
+        const union = [...new Set([...A, ...B])];
+        const interseccion = A.filter(x => B.includes(x));
+        const diffAB = A.filter(x => !B.includes(x));
+        const diffBA = B.filter(x => !A.includes(x));
+        
+        document.getElementById('conjuntosResult').innerHTML = `
+            <p><strong>Unión (A ∪ B):</strong> { ${union.join(', ')} }</p>
+            <p><strong>Intersección (A ∩ B):</strong> { ${interseccion.join(', ')} }</p>
+            <p><strong>Diferencia (A - B):</strong> { ${diffAB.join(', ')} }</p>
+            <p><strong>Diferencia (B - A):</strong> { ${diffBA.join(', ')} }</p>
+        `;
+    }
+
+    // --- 7. REGLA MULTIPLICATIVA Y DIAGRAMA DE ÁRBOL ---
+
+    function calcularReglaMultiplicativa() {
+        const pa = Number(document.getElementById('probA').value);
+        const pba = Number(document.getElementById('probB_A').value);
+        
+        if (isNaN(pa) || isNaN(pba)) {
+            alert("Ingrese probabilidades válidas (0 a 1)");
+            return;
+        }
+        
+        const intersection = pa * pba;
+        document.getElementById('arbolResult').innerHTML = `
+            <p><strong>Regla Multiplicativa:</strong> P(A ∩ B) = P(A) * P(B|A) = ${pa} * ${pba} = <strong>${intersection.toFixed(4)}</strong></p>
+        `;
+        
+        dibujarArbol(pa, pba);
+    }
+
+    function dibujarArbol(pa, pba) {
+        const ctx = clearCanvas('canvasArbol');
+        const w = 600, h = 300;
+        
+        const startX = 50, startY = h / 2;
+        const col1X = 200, col2X = 400;
+        
+        ctx.font = "14px Arial";
+        ctx.textAlign = "center";
+        
+        // Nodo raíz
+        ctx.fillText("Inicio", startX, startY - 10);
+        
+        // Rama A y A'
+        dibujarRama(ctx, startX, startY, col1X, h/4, `A (${pa})`);
+        dibujarRama(ctx, startX, startY, col1X, 3*h/4, `A' (${(1-pa).toFixed(2)})`);
+        
+        // Ramas de A
+        dibujarRama(ctx, col1X, h/4, col2X, h/8, `B|A (${pba})`);
+        dibujarRama(ctx, col1X, h/4, col2X, 3*h/8, `B'|A (${(1-pba).toFixed(2)})`);
+        
+        // Resultados finales
+        ctx.textAlign = "left";
+        ctx.fillText(`P(A∩B) = ${(pa*pba).toFixed(4)}`, col2X + 10, h/8);
+        ctx.fillText(`P(A∩B') = ${(pa*(1-pba)).toFixed(4)}`, col2X + 10, 3*h/8);
+    }
+
+    function dibujarRama(ctx, x1, y1, x2, y2, label) {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        ctx.fillText(label, (x1 + x2) / 2, (y1 + y2) / 2 - 5);
+    }
+
+    // --- 8. PERMUTACIONES Y COMBINACIONES ---
+
+    function factorial(n) {
+        if (n < 0) return 0;
+        if (n === 0 || n === 1) return 1;
+        let res = 1;
+        for (let i = 2; i <= n; i++) res *= i;
+        return res;
+    }
+
+    function calcularConteo() {
+        const n = Number(document.getElementById('valN').value);
+        const r = Number(document.getElementById('valR').value);
+        
+        if (n < r || n < 0 || r < 0) {
+            document.getElementById('conteoResult').innerHTML = "Error: n debe ser mayor o igual a r, y ambos positivos.";
+            return;
+        }
+        
+        const nPr = factorial(n) / factorial(n - r);
+        const nCr = nPr / factorial(r);
+        
+        document.getElementById('conteoResult').innerHTML = `
+            <p><strong>Permutaciones (nPr):</strong> ${nPr.toLocaleString()}</p>
+            <p><strong>Combinaciones (nCr):</strong> ${nCr.toLocaleString()}</p>
+        `;
+    }
+</script>
+
+</body>
+</html>

@@ -6,139 +6,270 @@
     <title>Probabilidad y Estadística - Aplicación Interactiva</title>
     <style>
         :root {
-            --primary: #2c3e50;
-            --secondary: #34495e;
-            --accent: #3498db;
-            --success: #27ae60;
-            --danger: #e74c3c;
-            --light: #0094b9;
-            --dark: #2c3e50;
+            --bg-dark: #050505;
+            --card-bg: #121212;
+            --neon-blue: #00f2ff;
+            --neon-purple: #bc13fe;
+            --text-light: #e0e0e0;
+            --accent-glow: rgba(0, 242, 255, 0.3);
+            --purple-glow: rgba(188, 19, 254, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
-            background-color: #17073f;
-            color: var(--dark);
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        /* Barra de Navegación */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(13, 13, 13, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--neon-purple);
+            padding: 10px 0;
+            z-index: 1000;
+            box-shadow: 0 0 15px var(--purple-glow);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 5px 15px;
+        }
+
+        nav ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav ul li a:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 8px var(--neon-blue);
         }
 
         .container {
-            max-width: 1000px;
-            margin: auto;
-            background: rgba(255, 255, 255, 0.984);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
         }
 
-        h1, h2, h3 {
+        h1 {
             text-align: center;
-            color: var(--primary);
-            border-bottom: 2px solid var(--accent);
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--accent-glow);
+        }
+
+        h2 {
+            color: var(--neon-purple);
+            border-bottom: 1px solid var(--neon-purple);
             padding-bottom: 10px;
+            margin-top: 0;
+            text-shadow: 0 0 5px var(--neon-purple);
+        }
+
+        h3 {
+            color: var(--neon-blue);
+            font-size: 1.1rem;
         }
 
         section {
-            margin-bottom: 40px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            margin-bottom: 60px;
+            padding: 30px;
+            background: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        section:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
 
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 30px;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 850px) {
             .grid { grid-template-columns: 1fr; }
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            color: var(--neon-blue);
+            font-weight: 500;
         }
 
         input, textarea, select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: white;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 5px var(--neon-blue);
         }
 
         button {
-            background-color: var(--accent);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
+            background: transparent;
+            color: var(--neon-blue);
+            padding: 12px 25px;
+            border: 2px solid var(--neon-blue);
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-            margin: 5px 0;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s;
+            margin-right: 10px;
+            margin-top: 10px;
+            box-shadow: 0 0 5px var(--accent-glow);
         }
 
         button:hover {
-            background-color: #2980b9;
+            background: var(--neon-blue);
+            color: black;
+            box-shadow: 0 0 20px var(--neon-blue);
         }
 
         button.secondary {
-            background-color: var(--secondary);
+            color: var(--neon-purple);
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 5px var(--purple-glow);
+        }
+
+        button.secondary:hover {
+            background: var(--neon-purple);
+            color: white;
+            box-shadow: 0 0 20px var(--neon-purple);
         }
 
         .error {
-            color: var(--danger);
+            color: #ff4d4d;
             font-weight: bold;
-            margin-top: 5px;
+            margin-top: 10px;
             display: none;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #333;
         }
 
         th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
+            padding: 15px;
             text-align: center;
+            border-bottom: 1px solid #333;
         }
 
         th {
-            background-color: var(--light);
+            background-color: #1a1a1a;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #1e1e1e;
         }
 
         canvas {
-            background: #fff;
-            border: 1px solid #ccc;
+            background: #0d0d0d;
+            border: 1px solid #333;
+            border-radius: 8px;
             width: 100%;
             height: auto;
             margin-top: 15px;
         }
 
         .result-box {
-            background: #f9f9f9;
-            padding: 15px;
-            border-left: 5px solid var(--accent);
-            margin-top: 10px;
+            background: #1a1a1a;
+            padding: 20px;
+            border-left: 4px solid var(--neon-blue);
+            border-radius: 4px;
+            margin-top: 20px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .result-box strong {
+            color: var(--neon-blue);
         }
 
         .chart-container {
-            margin-top: 20px;
+            margin-top: 10px;
+        }
+
+        /* Estilos específicos para el gráfico de árbol */
+        #canvasArbol {
+            border: 1px solid var(--neon-purple);
+            box-shadow: 0 0 10px var(--purple-glow);
         }
     </style>
 </head>
 <body>
+
+<nav>
+    <ul>
+        <li><a href="#datos">Datos</a></li>
+        <li><a href="#estadistica">Estadística</a></li>
+        <li><a href="#frecuencias">Frecuencias</a></li>
+        <li><a href="#graficas">Gráficas</a></li>
+        <li><a href="#probabilidad">Probabilidad</a></li>
+        <li><a href="#conjuntos">Conjuntos</a></li>
+        <li><a href="#regla-arbol">Árbol</a></li>
+        <li><a href="#conteo">Conteo</a></li>
+    </ul>
+</nav>
 
 <div class="container">
     <h1>Probabilidad y Estadística</h1>
@@ -154,6 +285,7 @@
         </div>
         <button onclick="procesarDatosManual()">Procesar Datos</button>
         <button class="secondary" onclick="generarDatosAleatorios()">Generar 20 Datos Aleatorios</button>
+        <button class="secondary" onclick="limpiarDatos()">Limpiar</button>
     </section>
 
     <!-- 2. ESTADÍSTICA DESCRIPTIVA -->
@@ -166,7 +298,7 @@
 
     <!-- 3. TABLA DE FRECUENCIAS -->
     <section id="frecuencias">
-        <h2>3. Tabla de Frecuencias</h2>
+        <h2>3. Tabla de Frecuencias (Agrupada)</h2>
         <div id="tabla-container">
             Esperando datos...
         </div>
@@ -294,10 +426,28 @@
     function generarDatosAleatorios() {
         let aleatorios = [];
         for (let i = 0; i < 20; i++) {
-            aleatorios.push(Math.floor(Math.random() * 100));
+            aleatorios.push(Math.floor(Math.random() * 500)); // Rango mayor para probar 3 cifras
         }
         document.getElementById('dataInput').value = aleatorios.join(', ');
         procesarDatosManual();
+    }
+
+    function limpiarDatos() {
+        datosGlobales = [];
+        tablaFrecuencias = [];
+        document.getElementById('dataInput').value = '';
+        document.getElementById('dataCount').innerText = 'Datos ingresados: 0';
+        document.getElementById('est-results').innerHTML = 'Esperando datos...';
+        document.getElementById('tabla-container').innerHTML = 'Esperando datos...';
+        document.getElementById('probResult').innerHTML = '';
+        document.getElementById('conjuntosResult').innerHTML = '';
+        document.getElementById('arbolResult').innerHTML = '';
+        document.getElementById('conteoResult').innerHTML = '';
+        clearCanvas('canvasHistograma');
+        clearCanvas('canvasPoligono');
+        clearCanvas('canvasOjiva');
+        clearCanvas('canvasPareto');
+        clearCanvas('canvasArbol');
     }
 
     function ejecutarAnalisis() {
@@ -328,7 +478,6 @@
             mediana = sorted[Math.floor(n / 2)];
         }
         
-        // Moda
         const counts = {};
         let maxFreq = 0;
         let modas = [];
@@ -339,58 +488,85 @@
         for (const val in counts) {
             if (counts[val] === maxFreq) modas.push(val);
         }
-        const modaStr = modas.length === Object.keys(counts).length ? 'No hay moda (todos únicos)' : modas.join(', ');
+        const modaStr = (modas.length === Object.keys(counts).length && n > 1) ? 'No hay moda' : modas.join(', ');
 
         const resDiv = document.getElementById('est-results');
         resDiv.innerHTML = `
-            <p><strong>Media:</strong> ${media.toFixed(2)}</p>
-            <p><strong>Mediana:</strong> ${mediana}</p>
-            <p><strong>Moda:</strong> ${modaStr} (Frecuencia: ${maxFreq})</p>
-            <p><strong>Mínimo:</strong> ${min}</p>
-            <p><strong>Máximo:</strong> ${max}</p>
-            <p><strong>Rango:</strong> ${rango}</p>
-            <p><strong>Total Datos (N):</strong> ${n}</p>
+            <div class="grid">
+                <div>
+                    <p><strong>Media:</strong> ${media.toFixed(2)}</p>
+                    <p><strong>Mediana:</strong> ${mediana}</p>
+                    <p><strong>Moda:</strong> ${modaStr}</p>
+                </div>
+                <div>
+                    <p><strong>Mínimo:</strong> ${min} | <strong>Máximo:</strong> ${max}</p>
+                    <p><strong>Rango:</strong> ${rango}</p>
+                    <p><strong>Total Datos (N):</strong> ${n}</p>
+                </div>
+            </div>
         `;
     }
 
-    // --- 3. TABLA DE FRECUENCIAS ---
+    // --- 3. TABLA DE FRECUENCIAS (INTERVALOS) ---
 
     function generarTablaFrecuencias() {
-        const counts = {};
-        datosGlobales.forEach(x => counts[x] = (counts[x] || 0) + 1);
+        const n = datosGlobales.length;
+        const sorted = [...datosGlobales].sort((a, b) => a - b);
+        const min = sorted[0];
+        const max = sorted[n - 1];
+        const rango = max - min;
         
-        const sortedKeys = Object.keys(counts).sort((a, b) => Number(a) - Number(b));
-        const N = datosGlobales.length;
+        // Regla de Sturges para número de clases (k)
+        const k = Math.ceil(1 + 3.322 * Math.log10(n));
+        const amplitud = Math.ceil(rango / k) || 1;
         
         tablaFrecuencias = [];
         let fiAcumulada = 0;
         
         let html = `<table>
             <tr>
-                <th>xi (Valor)</th>
-                <th>fi (Absoluta)</th>
-                <th>Fi (Acumulada)</th>
-                <th>fr (Relativa)</th>
-                <th>Fr (Rel. Acum.)</th>
+                <th>Clase (Intervalo)</th>
+                <th>xi (Marca)</th>
+                <th>fi (Abs)</th>
+                <th>Fi (Acum)</th>
+                <th>fr (Rel)</th>
+                <th>Fr (Acum)</th>
             </tr>`;
             
-        sortedKeys.forEach(key => {
-            const val = Number(key);
-            const fi = counts[key];
-            fiAcumulada += fi;
-            const fr = fi / N;
-            const Fr = fiAcumulada / N;
+        for (let i = 0; i < k; i++) {
+            const limInf = min + (i * amplitud);
+            const limSup = limInf + amplitud;
+            const marca = (limInf + limSup) / 2;
             
-            tablaFrecuencias.push({ xi: val, fi, Fi: fiAcumulada, fr, Fr });
+            // Contar frecuencia en el intervalo [limInf, limSup)
+            // En la última clase incluimos el límite superior [limInf, limSup]
+            const fi = sorted.filter(x => {
+                if (i === k - 1) return x >= limInf && x <= limSup;
+                return x >= limInf && x < limSup;
+            }).length;
+            
+            fiAcumulada += fi;
+            const fr = fi / n;
+            const Fr = fiAcumulada / n;
+            
+            tablaFrecuencias.push({ 
+                intervalo: `[${limInf} - ${limSup}${i === k - 1 ? ']' : ')'}`,
+                xi: marca, 
+                fi, 
+                Fi: fiAcumulada, 
+                fr, 
+                Fr 
+            });
             
             html += `<tr>
-                <td>${val}</td>
+                <td>${tablaFrecuencias[i].intervalo}</td>
+                <td>${marca.toFixed(1)}</td>
                 <td>${fi}</td>
                 <td>${fiAcumulada}</td>
                 <td>${fr.toFixed(4)}</td>
                 <td>${Fr.toFixed(4)}</td>
             </tr>`;
-        });
+        }
         
         html += `</table>`;
         document.getElementById('tabla-container').innerHTML = html;
@@ -402,117 +578,207 @@
         const canvas = document.getElementById(id);
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.shadowBlur = 0;
         return ctx;
     }
 
-    function dibujarEjes(ctx, w, h, padding) {
+    function dibujarEjes(ctx, w, h, pL, pB, maxVal) {
+        const pT = 20, pR = 20;
         ctx.beginPath();
-        ctx.moveTo(padding, padding);
-        ctx.lineTo(padding, h - padding);
-        ctx.lineTo(w - padding, h - padding);
+        ctx.strokeStyle = '#444';
+        ctx.lineWidth = 1;
+        // Eje Y
+        ctx.moveTo(pL, pT);
+        ctx.lineTo(pL, h - pB);
+        // Eje X
+        ctx.lineTo(w - pR, h - pB);
         ctx.stroke();
+
+        // Etiquetas Y (Escala)
+        ctx.fillStyle = '#888';
+        ctx.font = '10px Arial';
+        ctx.textAlign = 'right';
+        for (let i = 0; i <= 5; i++) {
+            const val = (maxVal / 5) * i;
+            const y = (h - pB) - (val / maxVal) * (h - pB - pT);
+            ctx.fillText(Math.round(val), pL - 10, y + 3);
+            ctx.beginPath();
+            ctx.moveTo(pL - 5, y);
+            ctx.lineTo(pL, y);
+            ctx.stroke();
+        }
     }
 
     function dibujarGraficas() {
         if (tablaFrecuencias.length === 0) return;
         
         const data = tablaFrecuencias;
-        const maxFi = Math.max(...data.map(d => d.fi));
+        const maxFi = Math.max(...data.map(d => d.fi)) || 1;
         const maxFiAcum = data[data.length - 1].Fi;
         
-        dibujarHistograma(data, maxFi);
-        dibujarPoligono(data, maxFi);
-        dibujarOjiva(data, maxFiAcum);
-        dibujarPareto(data);
+        const paddingLeft = 50; // Más espacio para números de 3 cifras
+        const paddingBottom = 50;
+
+        dibujarHistograma(data, maxFi, paddingLeft, paddingBottom);
+        dibujarPoligono(data, maxFi, paddingLeft, paddingBottom);
+        dibujarOjiva(data, maxFiAcum, paddingLeft, paddingBottom);
+        dibujarPareto(data, paddingLeft, paddingBottom);
     }
 
-    function dibujarHistograma(data, maxFi) {
+    function dibujarHistograma(data, maxFi, pL, pB) {
         const ctx = clearCanvas('canvasHistograma');
-        const w = 400, h = 300, p = 40;
-        dibujarEjes(ctx, w, h, p);
+        const w = 400, h = 300, pT = 20, pR = 20;
+        dibujarEjes(ctx, w, h, pL, pB, maxFi);
         
-        const barW = (w - 2 * p) / data.length;
+        const availW = w - pL - pR;
+        const availH = h - pB - pT;
+        const barW = availW / data.length;
+
         data.forEach((d, i) => {
-            const barH = (d.fi / maxFi) * (h - 2 * p);
-            ctx.fillStyle = '#3498db';
-            ctx.fillRect(p + i * barW, h - p - barH, barW - 2, barH);
-            ctx.fillStyle = '#000';
-            ctx.font = '10px Arial';
-            ctx.fillText(d.xi, p + i * barW + barW/4, h - p + 15);
+            const barH = (d.fi / maxFi) * availH;
+            const x = pL + i * barW;
+            const y = h - pB - barH;
+
+            ctx.fillStyle = '#00f2ff';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#00f2ff';
+            ctx.fillRect(x + 2, y, barW - 4, barH);
+            ctx.shadowBlur = 0;
+            
+            ctx.fillStyle = '#e0e0e0';
+            ctx.save();
+            ctx.translate(x + barW / 2, h - pB + 15);
+            ctx.rotate(Math.PI / 4);
+            ctx.textAlign = 'left';
+            ctx.font = '9px Arial';
+            ctx.fillText(d.xi.toFixed(1), 0, 0);
+            ctx.restore();
         });
     }
 
-    function dibujarPoligono(data, maxFi) {
+    function dibujarPoligono(data, maxFi, pL, pB) {
         const ctx = clearCanvas('canvasPoligono');
-        const w = 400, h = 300, p = 40;
-        dibujarEjes(ctx, w, h, p);
+        const w = 400, h = 300, pT = 20, pR = 20;
+        dibujarEjes(ctx, w, h, pL, pB, maxFi);
         
-        const stepX = (w - 2 * p) / (data.length - 1 || 1);
+        const availW = w - pL - pR;
+        const availH = h - pB - pT;
+        const stepX = availW / (data.length || 1);
+        
         ctx.beginPath();
-        ctx.strokeStyle = '#e74c3c';
+        ctx.strokeStyle = '#bc13fe';
+        ctx.lineWidth = 2;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#bc13fe';
+        
         data.forEach((d, i) => {
-            const x = p + i * stepX;
-            const y = h - p - (d.fi / maxFi) * (h - 2 * p);
+            const x = pL + (i + 0.5) * stepX;
+            const y = h - pB - (d.fi / maxFi) * availH;
             if (i === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
-            
-            ctx.arc(x, y, 3, 0, Math.PI * 2);
         });
         ctx.stroke();
+        
+        data.forEach((d, i) => {
+            const x = pL + (i + 0.5) * stepX;
+            const y = h - pB - (d.fi / maxFi) * availH;
+            ctx.beginPath();
+            ctx.fillStyle = '#fff';
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#e0e0e0';
+            ctx.font = '9px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(d.xi.toFixed(0), x, h - pB + 15);
+        });
+        ctx.shadowBlur = 0;
     }
 
-    function dibujarOjiva(data, maxFiAcum) {
+    function dibujarOjiva(data, maxFiAcum, pL, pB) {
         const ctx = clearCanvas('canvasOjiva');
-        const w = 400, h = 300, p = 40;
-        dibujarEjes(ctx, w, h, p);
+        const w = 400, h = 300, pT = 20, pR = 20;
+        dibujarEjes(ctx, w, h, pL, pB, maxFiAcum);
         
-        const stepX = (w - 2 * p) / (data.length - 1 || 1);
+        const availW = w - pL - pR;
+        const availH = h - pB - pT;
+        const stepX = availW / (data.length || 1);
+        
         ctx.beginPath();
-        ctx.strokeStyle = '#27ae60';
+        ctx.strokeStyle = '#00f2ff';
+        ctx.lineWidth = 2;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#00f2ff';
+        
         data.forEach((d, i) => {
-            const x = p + i * stepX;
-            const y = h - p - (d.Fi / maxFiAcum) * (h - 2 * p);
-            if (i === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-            
-            ctx.arc(x, y, 3, 0, Math.PI * 2);
+            const x = pL + (i + 1) * stepX;
+            const y = h - pB - (d.Fi / maxFiAcum) * availH;
+            if (i === 0) {
+                ctx.moveTo(pL, h - pB);
+                ctx.lineTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
         });
         ctx.stroke();
+        
+        data.forEach((d, i) => {
+            const x = pL + (i + 1) * stepX;
+            const y = h - pB - (d.Fi / maxFiAcum) * availH;
+            ctx.beginPath();
+            ctx.fillStyle = '#fff';
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        ctx.shadowBlur = 0;
     }
 
-    function dibujarPareto(data) {
+    function dibujarPareto(data, pL, pB) {
         const ctx = clearCanvas('canvasPareto');
-        const w = 400, h = 300, p = 40;
-        dibujarEjes(ctx, w, h, p);
+        const w = 400, h = 300, pT = 20, pR = 20;
         
-        // Ordenar descendente para Pareto
         const paretoData = [...data].sort((a, b) => b.fi - a.fi);
-        const total = paretoData[paretoData.length - 1].Fi; // Esto no es correcto si ordeno, necesito el N total
         const N = datosGlobales.length;
-        const maxFi = paretoData[0].fi;
+        const maxFi = paretoData[0].fi || 1;
         
-        const barW = (w - 2 * p) / paretoData.length;
+        dibujarEjes(ctx, w, h, pL, pB, maxFi);
+        
+        const availW = w - pL - pR;
+        const availH = h - pB - pT;
+        const barW = availW / paretoData.length;
         let acum = 0;
         
-        // Barras
         paretoData.forEach((d, i) => {
-            const barH = (d.fi / maxFi) * (h - 2 * p);
-            ctx.fillStyle = '#f1c40f';
-            ctx.fillRect(p + i * barW, h - p - barH, barW - 2, barH);
+            const barH = (d.fi / maxFi) * availH;
+            const x = pL + i * barW;
+            const y = h - pB - barH;
+            ctx.fillStyle = 'rgba(0, 242, 255, 0.4)';
+            ctx.fillRect(x + 2, y, barW - 4, barH);
         });
         
-        // Línea acumulada
         ctx.beginPath();
-        ctx.strokeStyle = '#2c3e50';
+        ctx.strokeStyle = '#bc13fe';
+        ctx.lineWidth = 2;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#bc13fe';
+        
         paretoData.forEach((d, i) => {
             acum += d.fi;
-            const x = p + i * barW + barW/2;
-            const y = h - p - (acum / N) * (h - 2 * p);
+            const x = pL + i * barW + barW/2;
+            const y = h - pB - (acum / N) * availH;
             if (i === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
-            ctx.arc(x, y, 2, 0, Math.PI * 2);
+            
+            ctx.save();
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.fillStyle = '#fff';
+            ctx.arc(x, y, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
         });
         ctx.stroke();
+        ctx.shadowBlur = 0;
     }
 
     // --- 5. PROBABILIDAD ---
@@ -521,18 +787,19 @@
         const val = Number(document.getElementById('probValue').value);
         const resDiv = document.getElementById('probResult');
         
-        if (tablaFrecuencias.length === 0) {
+        if (datosGlobales.length === 0) {
             resDiv.innerHTML = "Primero ingrese datos.";
             return;
         }
         
-        const row = tablaFrecuencias.find(d => d.xi === val);
-        if (row) {
-            const N = datosGlobales.length;
-            resDiv.innerHTML = `P(${val}) = fi / N = ${row.fi} / ${N} = <strong>${row.fr.toFixed(4)}</strong>`;
-        } else {
-            resDiv.innerHTML = `El valor ${val} no se encuentra en los datos ingresados. P(${val}) = 0`;
-        }
+        const count = datosGlobales.filter(x => x === val).length;
+        const N = datosGlobales.length;
+        const prob = count / N;
+        
+        resDiv.innerHTML = `
+            <p>Frecuencia de <strong>${val}</strong>: ${count}</p>
+            <p>P(${val}) = ${count} / ${N} = <strong>${prob.toFixed(4)}</strong></p>
+        `;
     }
 
     // --- 6. CONJUNTOS ---
@@ -588,6 +855,8 @@
         
         ctx.font = "14px Arial";
         ctx.textAlign = "center";
+        ctx.strokeStyle = '#bc13fe';
+        ctx.fillStyle = '#e0e0e0';
         
         // Nodo raíz
         ctx.fillText("Inicio", startX, startY - 10);
@@ -602,6 +871,7 @@
         
         // Resultados finales
         ctx.textAlign = "left";
+        ctx.fillStyle = '#00f2ff';
         ctx.fillText(`P(A∩B) = ${(pa*pba).toFixed(4)}`, col2X + 10, h/8);
         ctx.fillText(`P(A∩B') = ${(pa*(1-pba)).toFixed(4)}`, col2X + 10, 3*h/8);
     }
